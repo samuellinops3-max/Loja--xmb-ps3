@@ -13,14 +13,16 @@ jobs:
     - name: Iniciar Ambiente
       uses: actions/checkout@v4
 
-    - name: Baixar Ferramentas de Compilacao
+    - name: Instalar Ferramentas Oficiais PS3
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget python3 python3-pip
-        pip3 install pycryptodome --break-system-packages || pip3 install pycryptodome
-        wget https://githubusercontent.com
+        sudo apt-get install -y libssl-dev gcc make git
+        git clone --depth 1 https://github.com
+        cd ps3_tools/make_package_npdrm
+        make
+        sudo cp make_package_npdrm /usr/local/bin/
 
-    - name: Criar Configuracao e Menu Interno
+    - name: Criar Estrutura e Menu Interno
       run: |
         echo "Content-ID = UP0001-LOJAXMB01_00-0000111122223333" > package.conf
         echo "PackageType = Homebrew" >> package.conf
@@ -29,7 +31,7 @@ jobs:
 
     - name: Fabricar o Arquivo PKG
       run: |
-        python3 make_package_npdrm.py package.conf input
+        make_package_npdrm package.conf input
         mv *.pkg MeuMenuPS3.pkg
 
     - name: Disponibilizar para Download
