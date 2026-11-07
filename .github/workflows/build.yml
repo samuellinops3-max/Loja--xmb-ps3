@@ -16,7 +16,8 @@ jobs:
     - name: Baixar Ferramentas de Compilacao
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget python3
+        sudo apt-get install -y wget python3 python3-pip
+        pip3 install pycryptodome --break-system-packages || pip3 install pycryptodome
         wget https://githubusercontent.com
 
     - name: Criar Configuracao e Menu Interno
